@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_title or "Admin" }}</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/logodau.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-logo">
+          <a href="{{ url_for('home') }}">
+            <img src="{{ logo_url }}" alt="logo">
+          </a>
+        </div>
+        <div class="brand-name">Admin</div>
+      </div>
+      <nav class="menu">
+        <a class="menu-item {% if request.path.startswith('/admin/dashboard') %}active{% endif %}" href="{{ url_for('admin_dashboard') }}">
+          <span class="icon">🏠</span> <span>Dashboard</span>
+        </a>
+        <a class="menu-item {% if request.path.startswith('/admin/files') %}active{% endif %}" href="{{ url_for('admin_files') }}">
+          <span class="icon">📂</span> <span>Quản lý Files</span>
+        </a>
+        <a class="menu-item {% if request.path.startswith('/admin/users') %}active{% endif %}" href="{{ url_for('admin_users') }}">
+          <span class="icon">👤</span> <span>Quản lý Users</span>
+        </a>
+      </nav>
+      <a class="logout" href="{{ url_for('logout') }}">⏻ Đăng xuất</a>
+    </aside>
+
+    <main class="content">
+      <header class="topbar">
+        <div>
+          <p class="top-sub">Admin</p>
+          <h1 class="top-title">{{ page_title or "Trang quản trị" }}</h1>
+        </div>
+        <div class="top-actions">
+          <div class="search">
+            <input type="text" placeholder="Tìm kiếm...">
+            <span>🔍</span>
+          </div>
+          <button class="icon-btn ghost" type="button">🔔</button>
+          <div class="avatar">{{ session.get("username", "A")[0]|upper }}</div>
+        </div>
+      </header>
+
+      <section class="content-body">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-stack">
+              {% for category, msg in messages %}
+                <div class="flash {{ category }}">{{ msg }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+      </section>
+    </main>
+  </div>
+</body>
+</html>

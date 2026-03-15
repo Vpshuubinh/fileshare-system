@@ -1,0 +1,117 @@
+{% extends "layout.html" %}
+{% block title %}Điều khoản sử dụng dịch vụ VPS{% endblock %}
+{% block extra_head %}
+<style>
+  :root {
+    --blue: #1f8bff;
+    --teal: #14d6d6;
+    --text-primary: #0f172a;
+    --text-muted: #475569;
+  }
+  body.blog-page {
+    background: radial-gradient(circle at 20% 20%, rgba(31,139,255,0.08), transparent 30%),
+                radial-gradient(circle at 80% 10%, rgba(20,214,214,0.1), transparent 28%),
+                #f6fbff;
+    color: var(--text-primary);
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+  }
+  /* giữ navbar theo style sáng mặc định */
+  .terms-hero {
+    padding: 72px 16px 32px;
+    text-align: center;
+    color: #0f172a;
+  }
+  .terms-hero h1 { margin: 0; font-size: 36px; letter-spacing: -0.5px; }
+  .terms-hero p { margin: 12px auto 0; max-width: 720px; color: var(--text-muted); line-height: 1.8; }
+  .terms-shell {
+    max-width: 900px;
+    margin: 0 auto 80px;
+    padding: 0 16px 40px;
+  }
+  .terms-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 24px 60px rgba(31,139,255,0.12);
+    border-radius: 20px;
+    padding: 32px;
+  }
+  .terms-card h2 { margin-top: 32px; margin-bottom: 10px; color: #0f172a; }
+  .terms-card h3 { margin-top: 18px; margin-bottom: 8px; color: var(--blue); font-size: 18px; letter-spacing: 0.1px; }
+  .terms-card p { color: var(--text-muted); line-height: 1.9; margin: 10px 0 14px; }
+  .terms-card ul { padding-left: 20px; color: #0f172a; line-height: 1.9; }
+  .terms-card li { margin-bottom: 8px; }
+  .terms-card strong { color: #0f172a; }
+  @media (max-width: 720px) {
+    .terms-card { padding: 22px; }
+    .terms-hero h1 { font-size: 28px; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="terms-hero">
+  <h1>Điều khoản sử dụng dịch vụ VPS</h1>
+  <p>Khi truy cập website và sử dụng dịch vụ VPS của chúng tôi, bạn đồng ý tuân thủ toàn bộ điều khoản dưới đây nhằm đảm bảo môi trường vận hành an toàn, ổn định và minh bạch.</p>
+</section>
+
+<section class="terms-shell">
+  <article class="terms-card">
+    <h2>Giới thiệu</h2>
+    <p>Khi truy cập website và sử dụng dịch vụ VPS, bạn mặc nhiên đồng ý với các điều khoản, quy định, chính sách bảo mật và mọi cập nhật liên quan được nêu trong tài liệu này.</p>
+
+    <h2>Phạm vi áp dụng</h2>
+    <h3>Đối tượng áp dụng</h3>
+    <ul>
+      <li>Khách hàng mua VPS</li>
+      <li>Người truy cập website</li>
+      <li>Người sử dụng tài nguyên server</li>
+    </ul>
+    <h3>Thay đổi điều khoản</h3>
+    <p>Chúng tôi có quyền thay đổi điều khoản bất kỳ lúc nào và sẽ cập nhật trên trang này. Việc tiếp tục sử dụng dịch vụ đồng nghĩa bạn chấp nhận các thay đổi đó.</p>
+
+    <h2>Quyền và nghĩa vụ của người dùng</h2>
+    <h3>Quyền của người dùng</h3>
+    <ul>
+      <li>Sử dụng dịch vụ VPS theo gói đã mua</li>
+      <li>Truy cập và quản lý server</li>
+      <li>Yêu cầu hỗ trợ kỹ thuật</li>
+    </ul>
+    <h3>Nghĩa vụ của người dùng</h3>
+    <ul>
+      <li>Không sử dụng VPS cho hoạt động bất hợp pháp</li>
+      <li>Không phát tán malware hoặc spam</li>
+      <li>Chịu trách nhiệm nội dung trên server</li>
+    </ul>
+
+    <h2>Chính sách sử dụng tài nguyên</h2>
+    <h3>Giới hạn tài nguyên</h3>
+    <p>Người dùng phải sử dụng CPU, RAM và băng thông trong giới hạn gói dịch vụ đã đăng ký, tránh ảnh hưởng đến hạ tầng chung.</p>
+    <h3>Hoạt động bị cấm</h3>
+    <ul>
+      <li>Tấn công mạng</li>
+      <li>Spam email</li>
+      <li>Phát tán virus</li>
+      <li>Đào tiền điện tử trái phép</li>
+    </ul>
+
+    <h2>Chính sách thanh toán</h2>
+    <ul>
+      <li>Thanh toán trước khi sử dụng dịch vụ</li>
+      <li>Dịch vụ có thể bị tạm ngừng nếu quá hạn thanh toán</li>
+    </ul>
+
+    <h2>Chính sách chấm dứt dịch vụ</h2>
+    <p>Chúng tôi có quyền tạm ngưng hoặc chấm dứt dịch vụ nếu phát hiện vi phạm điều khoản sử dụng.</p>
+
+    <h2>Giới hạn trách nhiệm</h2>
+    <ul>
+      <li>Mất dữ liệu</li>
+      <li>Lỗi do cấu hình server của khách hàng</li>
+      <li>Sự cố ngoài kiểm soát như thiên tai hoặc lỗi mạng quốc tế</li>
+    </ul>
+
+    <h2>Thông tin liên hệ</h2>
+    <p>Nếu có câu hỏi về điều khoản sử dụng, người dùng có thể liên hệ qua email hỗ trợ hoặc sử dụng trang liên hệ trên website.</p>
+  </article>
+</section>
+{% endblock %}

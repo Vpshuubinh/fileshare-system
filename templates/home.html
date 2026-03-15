@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FileShare | Chia sẻ file nhanh chóng</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/logodau.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body data-logged="{{ 1 if session.get('user_id') else 0 }}">
+  <header class="navbar">
+    <div class="brand">
+      <div class="logo-img">
+        <a href="{{ url_for('home') }}">
+          <img src="{{ logo_url }}" alt="logo">
+        </a>
+      </div>
+    </div>
+    <nav class="nav-links">
+      <a href="#features">Tính năng</a>
+      <a href="#pricing">Bảng giá</a>
+      <a href="blog">Về chúng tôi</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="login" href="{{ url_for('login') }}">Đăng nhập</a>
+      <a class="primary" href="{{ url_for('register') }}">Đăng ký</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="badge">Miễn phí 100% - Không cần đăng ký</div>
+      <h1>Upload & Chia sẻ File<br><span>Nhanh chóng - An toàn</span></h1>
+      <p>Chia sẻ file dễ dàng với link có mật khẩu bảo vệ và thời hạn 24h. Không giới hạn dung lượng, hỗ trợ mọi định dạng file.</p>
+
+      <div class="drop-card" id="landingDrop">
+        <input type="file" id="landingFileInput" name="file" hidden>
+        <div class="drop-icon">⬆</div>
+        <h3>Kéo thả file vào đây</h3>
+        <p>hoặc click để chọn file</p>
+        <small>Hỗ trợ mọi định dạng • Tối đa 2GB</small>
+        <div id="landingStatus" class="status"></div>
+        <div class="progress-wrap hidden">
+          <div id="uploadProgress" class="progress-bar"></div>
+        </div>
+        <div id="selectedFile" class="selected hidden">
+          <div class="file-row">
+            <div>
+              <strong id="fileName"></strong>
+              <div class="muted" id="fileSize"></div>
+            </div>
+            <div class="file-actions">
+              <button type="button" id="removeFile" class="ghost">✕</button>
+              <button type="button" id="uploadBtn" class="btn-primary small">Upload</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="recent">
+      <h3>File đã upload gần đây</h3>
+      <div class="recent-list">
+        {% if recent %}
+          {% for f in recent %}
+          <div class="recent-card">
+            <div class="row">
+              <div class="icon-file">📄</div>
+              <div>
+                <div class="name">{{ f.filename }}</div>
+                <div class="muted">{{ format_size(f.filesize) }}</div>
+              </div>
+            </div>
+            <div class="row space">
+              <div class="tags">
+                {% if f.password %}<span class="tag warn">Có mật khẩu</span>{% endif %}
+                <span class="tag light">{{ f.expire_time }}</span>
+              </div>
+              <button class="btn-secondary copy-btn" data-copy="{{ url_for('download_file', file_id=f.file_id, _external=True) }}">Copy link</button>
+            </div>
+          </div>
+          {% endfor %}
+        {% else %}
+          <p class="muted">Chưa có file nào, hãy upload thử!</p>
+        {% endif %}
+      </div>
+    </section>
+
+    <section class="features" id="features">
+      <div class="feature-card">
+        <div class="icon shield"></div>
+        <h4>Bảo mật cao</h4>
+        <p>Đặt mật khẩu bảo vệ cho link download. Chỉ người có mật khẩu mới có thể tải file.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon clock"></div>
+        <h4>Tự động hết hạn</h4>
+        <p>Link download tự động hết hạn sau 24h. Đảm bảo file của bạn không lưu trữ mãi mãi.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon grid"></div>
+        <h4>Quản lý dễ dàng</h4>
+        <p>Quản lý tất cả file đã upload, xem thống kê, download và xóa file chỉ với vài click.</p>
+      </div>
+    </section>
+
+    <section class="pricing" id="pricing">
+      <div class="pricing-head">
+        <p class="eyebrow">Bảng giá linh hoạt</p>
+        <h2>Chọn gói phù hợp với nhu cầu của bạn</h2>
+        <p class="sub">Nâng cấp hoặc hạ cấp bất cứ lúc nào. Không ràng buộc, không phí ẩn.</p>
+        <div class="billing-toggle">
+          <button class="toggle-btn active" type="button">Theo tháng</button>
+          <button class="toggle-btn" type="button">Theo năm (tiết kiệm 25%)</button>
+        </div>
+      </div>
+
+      <div class="pricing-grid">
+        <div class="price-card">
+          <div class="card-top">
+            <div class="plan">Free</div>
+            <div class="price"><span class="value">0đ</span><span class="per">/tháng</span></div>
+            <p class="muted">5 GB dung lượng lưu trữ</p>
+          </div>
+          <ul class="perks">
+            <li class="ok">5 GB mỗi tập tin</li>
+            <li class="ok">Tốc độ tải xuống tiêu chuẩn</li>
+            <li class="ok">Tải xuống từng tệp riêng lẻ</li>
+            <li class="no">Tải xuống có quảng cáo</li>
+          </ul>
+          <a class="btn ghost-outline" href="{{ url_for('register') }}">Bắt đầu miễn phí</a>
+        </div>
+
+        <div class="price-card featured">
+          <div class="ribbon">
+            <img src="{{ url_for('public_files', filename='qc/banchay.png') }}" alt="Bán chạy">
+          </div>
+          <div class="card-top">
+            <div class="plan">Platinum</div>
+            <div class="price"><span class="value">150.000đ</span><span class="per">/tháng</span></div>
+            <p class="save">hoặc 1.200.000đ/năm (tiết kiệm 600.000đ)</p>
+          </div>
+          <ul class="perks">
+            <li class="ok">100 GB dung lượng lưu trữ dài hạn</li>
+            <li class="ok">50 GB CDN tốc độ cao không quảng cáo</li>
+            <li class="ok">50 GB mỗi tập tin</li>
+            <li class="ok">Tải xuống nhiều tệp cùng lúc</li>
+            <li class="ok">Liên kết trực tiếp đến tệp</li>
+            <li class="ok">Tệp bảo vệ bằng mật khẩu</li>
+            <li class="ok">Liên kết dùng một lần</li>
+            <li class="ok">Màu sắc tùy chỉnh</li>
+            <li class="ok">Hỗ trợ ưu tiên</li>
+          </ul>
+          <a class="btn primary" href="{{ url_for('register') }}">Nâng cấp ngay</a>
+        </div>
+
+        <div class="price-card pro">
+          <div class="card-top">
+            <div class="plan">Business</div>
+            <div class="price"><span class="value">180.000đ</span><span class="per">/tháng</span></div>
+            <p class="save">hoặc 1.500.000đ/năm (tiết kiệm 660.000đ)</p>
+          </div>
+          <ul class="perks">
+            <li class="ok">1 TB dung lượng lưu trữ dài hạn</li>
+            <li class="ok">1 TB dung lượng không quảng cáo</li>
+            <li class="ok">50 GB mỗi tập tin</li>
+            <li class="ok">Tải xuống nhiều tệp cùng lúc</li>
+            <li class="ok">Liên kết trực tiếp đến tệp</li>
+            <li class="ok">Yêu cầu tệp qua FileDrop</li>
+            <li class="ok">Tệp bảo vệ bằng mật khẩu</li>
+            <li class="ok">Liên kết dùng một lần</li>
+            <li class="ok">Tải lên web & nhúng</li>
+            <li class="ok">Màu sắc tùy chỉnh</li>
+            <li class="ok">Hỗ trợ ưu tiên</li>
+          </ul>
+          <a class="btn dark" href="{{ url_for('admin_dashboard') }}">Liên hệ tư vấn</a>
+        </div>
+      </div>
+
+      <p class="note">Tất cả gói có thể nâng cấp hoặc hạ cấp bất kỳ lúc nào.</p>
+    </section>
+
+    <section class="contact-block" id="contact">
+      <div class="contact-inner">
+        <div>
+          <p class="eyebrow">Cần hỗ trợ?</p>
+          <h2>Liên hệ đội ngũ FileShare</h2>
+          <p class="sub">Nhận tư vấn gói VPS, hỗ trợ kỹ thuật hoặc giải đáp thắc mắc qua trang liên hệ chính thức.</p>
+        </div>
+        <div class="contact-actions">
+          <a class="btn primary" href="{{ url_for('contact') }}">Mở trang liên hệ</a>
+          <a class="btn ghost-outline" href="{{ url_for('contact') }}">Chat ngay</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="cta" id="cta">
+      <h2>Sẵn sàng bắt đầu?</h2>
+      <p>Đăng ký tài khoản miễn phí để quản lý file tốt hơn và nhận nhiều tính năng độc quyền</p>
+      <div class="cta-actions">
+        <a class="btn light" href="{{ url_for('register') }}">Đăng ký miễn phí</a>
+        <a class="btn dark" href="{{ url_for('admin_dashboard') }}">Xem Admin Demo</a>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast-stack" id="toastStack"></div>
+
+  <div class="modal-backdrop hidden" id="optionsModal">
+    <div class="modal">
+      <h4>Tùy chọn upload</h4>
+      <label class="modal-label">Mật khẩu bảo vệ (tùy chọn)</label>
+      <input type="text" id="modalPassword" placeholder="Nhập mật khẩu...">
+      <label class="modal-label">Thời hạn link</label>
+      <select id="modalExpire">
+        <option value="1">1 giờ</option>
+        <option value="6">6 giờ</option>
+        <option value="12">12 giờ</option>
+        <option value="24" selected>24 giờ</option>
+        <option value="48">48 giờ</option>
+        <option value="0">Vĩnh viễn (đăng nhập để kích hoạt)</option>
+      </select>
+      <p class="hint">Gợi ý: Đăng ký/đăng nhập để chọn “Vĩnh viễn” và lưu trữ không hết hạn.</p>
+      <div class="modal-actions">
+        <button type="button" class="ghost" id="modalCancel">Hủy</button>
+        <button type="button" class="btn-primary" id="modalConfirm">Upload</button>
+      </div>
+    </div>
+  </div>
+
+  <footer id="about">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img class="footer-logo" src="{{ logo_url }}" alt="logo">
+        <div>
+          <h4>FileShare</h4>
+          <p>Dịch vụ upload và chia sẻ file nhanh chóng, an toàn.</p>
+        </div>
+      </div>
+
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h5>Sản phẩm</h5>
+          <a href="#features">Tính năng</a>
+          <a href="#pricing">Bảng giá</a>
+        </div>
+        <div class="footer-col">
+          <h5>Giới thiệu</h5>
+          <a href="blog">Blog</a>
+          <a href="lien-he">Liên hệ</a>
+          <a href="FileShare">Thuê VPS</a>
+        </div>
+        <div class="footer-col">
+          <h5>Kết nối</h5>
+          <div class="social">
+            <a class="social-btn fb" href="#" aria-label="Facebook">fb</a>
+            <a class="social-btn tg" href="#" aria-label="Telegram">tg</a>
+            <a class="social-btn yt" href="#" aria-label="YouTube">yt</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="copyright">© 2026 FileShare. All rights reserved.</div>
+    </div>
+  </footer>
+</body>
+</html>

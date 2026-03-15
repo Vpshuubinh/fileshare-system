@@ -1,0 +1,55 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+<div class="card table-card">
+  <div class="table-head files">
+    <div>Filename</div>
+    <div>Uploader</div>
+    <div>Kích thước</div>
+    <div>Ngày upload</div>
+    <div>Trạng thái</div>
+    <div>Thao tác</div>
+  </div>
+  {% for f in files %}
+  <div class="table-row files">
+    <div class="file-cell">
+      <div class="file-icon">📄</div>
+      <div>
+        <p class="name">{{ f.filename }}</p>
+        <p class="muted">/file/{{ f.file_id }}</p>
+      </div>
+    </div>
+    <div>{{ f.uploader }}</div>
+    <div>{{ format_size(f.filesize) }}</div>
+    <div>{{ f.upload_time }}</div>
+    <div>
+      {% if f.password %}
+        <span class="pill warn">Locked</span>
+      {% else %}
+        <span class="pill success">Public</span>
+      {% endif %}
+    </div>
+    <div class="actions">
+      <a class="icon-btn ghost" target="_blank" href="{{ url_for('download_file', file_id=f.file_id) }}" title="Xem">👁️</a>
+      <button class="icon-btn" type="button" data-copy="{{ url_for('download_file', file_id=f.file_id, _external=True) }}" title="Copy link">🔗</button>
+      <form method="POST" action="{{ url_for('delete_file', file_id=f.file_id) }}">
+        <button class="icon-btn danger" type="submit" title="Xóa">🗑️</button>
+      </form>
+    </div>
+  </div>
+  {% else %}
+    <div class="empty">Chưa có file.</div>
+  {% endfor %}
+</div>
+
+<script>
+  document.querySelectorAll('[data-copy]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const link = btn.getAttribute('data-copy');
+      navigator.clipboard.writeText(link).then(() => {
+        btn.textContent = '✅';
+        setTimeout(() => btn.textContent = '🔗', 900);
+      });
+    });
+  });
+</script>
+{% endblock %}

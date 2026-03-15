@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FileShare | Đăng nhập</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+<body class="auth-body">
+  <div class="auth-card" id="authCard">
+    <div class="logo-pill">
+      <a href="{{ url_for('home') }}">
+        <img src="{{ logo_url }}" alt="logo">
+      </a>
+    </div>
+    <h2>Chào mừng trở lại</h2>
+    <p class="subtitle">Đăng nhập để quản lý file của bạn</p>
+
+    <div class="tab-switch">
+      <a class="tab active" href="{{ url_for('login') }}">Đăng nhập</a>
+      <a class="tab" href="{{ url_for('register') }}">Đăng ký</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash toast-mount" data-flash='{{ messages|tojson }}'></div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="auth-form">
+      <label class="input-row">
+        <span class="icon">✉</span>
+        <input type="text" name="username" placeholder="Tên đăng nhập" required>
+      </label>
+      <label class="input-row">
+        <span class="icon">🔒</span>
+        <input type="password" name="password" placeholder="Mật khẩu" required>
+      </label>
+      <div class="inline-link">
+        <a href="{{ url_for('register') }}">Chưa có tài khoản?</a>
+      </div>
+      <button type="submit" class="btn-primary" data-label="Đăng nhập">Đăng nhập</button>
+    </form>
+
+    <div class="divider"><span>Hoặc tiếp tục với</span></div>
+    <div class="social-row">
+      <button type="button" class="social-btn">G Google</button>
+      <button type="button" class="social-btn">f Facebook</button>
+    </div>
+
+    <div class="back-home">
+      <a href="{{ url_for('home') }}">← Quay lại trang chủ</a>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+</html>

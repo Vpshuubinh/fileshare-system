@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FileShare | Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="brand">
+        <a href="{{ url_for('home') }}">
+          <img src="{{ logo_url }}" alt="logo">
+        </a>
+      </div>
+      <div class="search">
+        <input type="text" id="searchInput" placeholder="Tìm kiếm file...">
+      </div>
+      <div class="top-actions">
+        <div class="bell">
+          <span class="icon">🔔</span>
+          <span class="badge">3</span>
+        </div>
+        <div class="user">
+          <div class="avatar">{{ session.get("username", "U")[0]|upper }}</div>
+          <span class="username">{{ session.get("username","User") }}</span>
+        </div>
+        <a class="logout" href="{{ url_for('logout') }}">Đăng xuất</a>
+      </div>
+    </header>
+
+    <main class="grid">
+      <aside class="sidebar">
+        <div class="card upload-card" id="quickUploadDrop">
+          <p class="title">Upload nhanh</p>
+          <div class="upload-box">
+            <div class="upload-icon">⬆</div>
+            <p>Kéo thả hoặc click</p>
+            <small>Tối đa 500MB</small>
+          </div>
+          <input type="file" id="quickFileInput" hidden>
+          <label class="muted" style="display:block; margin-top:8px;">Thời hạn</label>
+          <select id="quickExpire" class="select">
+            <option value="24">24h</option>
+            <option value="48">48h</option>
+            <option value="0">Vĩnh viễn (chỉ tài khoản)</option>
+          </select>
+          <div class="progress hidden">
+            <div class="progress-bar" id="uploadProgressBar"></div>
+          </div>
+        </div>
+
+        {% set total_files = files|length %}
+        {% set pwd_files = files|selectattr('password')|list|length %}
+        {% set total_downloads = files|map(attribute='downloads', default=0)|sum %}
+
+        <div class="card stats-card">
+          <p class="title">Thống kê</p>
+          <div class="stat-row"><span class="icon blue">📄</span> <div><p class="label">Tổng file</p><strong>{{ total_files }}</strong></div></div>
+          <div class="stat-row"><span class="icon orange">🔒</span> <div><p class="label">Có mật khẩu</p><strong>{{ pwd_files }}</strong></div></div>
+          <div class="stat-row"><span class="icon green">⬇</span> <div><p class="label">Lượt tải</p><strong>{{ total_downloads or 0 }}</strong></div></div>
+        </div>
+
+        <div class="card storage-card">
+          <div class="row">
+            <div class="icon-box">🗂</div>
+            <div>
+              <p class="title">Dung lượng</p>
+              <p class="muted">{{ used_mb }} MB / {{ (cap_mb/1024)|round(1) }} GB</p>
+            </div>
+          </div>
+          <div class="storage-bar">
+            <div style="width: {{ percent }}%"></div>
+          </div>
+          <p class="muted">{{ percent }}% đã sử dụng</p>
+        </div>
+      </aside>
+
+      <section class="main">
+        <div class="banner">
+          <div>
+            <p class="welcome">Xin chào, {{ session.get("username","Bạn") }}! 👋</p>
+            <p class="sub">Quản lý và chia sẻ file của bạn một cách dễ dàng và an toàn.</p>
+          </div>
+        </div>
+
+        <div class="tabs">
+          <button class="tab active" data-filter="all">Tất cả file</button>
+          <button class="tab" data-filter="pwd">Có mật khẩu</button>
+          <button class="tab" data-filter="exp">Sắp hết hạn</button>
+        </div>
+
+        <div class="table-card">
+          <div class="table-head">
+            <div>Tên file</div>
+            <div>Ngày upload</div>
+            <div>Kích thước</div>
+            <div>Thời hạn</div>
+            <div>Lượt tải</div>
+            <div>Thao tác</div>
+          </div>
+          <div id="fileTable">
+            {% for f in files %}
+              {% set expire_iso = f.expire_time %}
+              <div class="row file-row" data-name="{{ f.filename|lower }}" data-pwd="{{ '1' if f.password else '0' }}" data-expire="{{ expire_iso }}">
+                <div class="cell name">
+                  <span class="file-icon">📄</span>
+                  <div>
+                    <p class="fname">{{ f.filename }}</p>
+                    {% if f.password %}<span class="badge warn">Có mật khẩu</span>{% endif %}
+                  </div>
+                </div>
+                <div class="cell">
+                  <p class="muted">{{ f.upload_time }}</p>
+                </div>
+                <div class="cell">{{ format_size(f.filesize) }}</div>
+                <div class="cell"><span class="badge" data-exp-badge>--</span></div>
+                <div class="cell">{{ f.downloads or 0 }}</div>
+                <div class="cell actions">
+                  <button class="icon-btn" data-copy="{{ url_for('download_file', file_id=f.file_id, _external=True) }}">🔗</button>
+                  <a class="icon-btn" href="{{ url_for('download_file', file_id=f.file_id) }}" target="_blank">👁</a>
+                  <form method="POST" action="{{ url_for('delete_file', file_id=f.file_id) }}" style="display:inline;">
+                    <button class="icon-btn danger" type="submit">🗑</button>
+                  </form>
+                </div>
+              </div>
+            {% else %}
+              <div class="row empty">Chưa có file nào.</div>
+            {% endfor %}
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <div class="toast-stack" id="toastStack"></div>
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>

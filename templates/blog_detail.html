@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+
+{% block title %}{{ post.title }} | Blog{% endblock %}
+
+{% block content %}
+  <section class="blog-hero detail-hero">
+    <p class="eyebrow">{{ post.date }}</p>
+    <h1>{{ post.title }}</h1>
+    <p class="lead">{{ post.desc }}</p>
+  </section>
+
+  <article class="article-wrap">
+    <div class="article-cover">
+      <img src="{{ post.image }}" alt="{{ post.title }}">
+    </div>
+
+    {% for section in post.sections %}
+      {% set level = section.level or 2 %}
+      {% if level == 3 %}
+        <h3>{{ section.heading }}</h3>
+      {% else %}
+        <h2>{{ section.heading }}</h2>
+      {% endif %}
+      {% if section.image %}
+        <figure class="article-figure">
+          <img src="{{ section.image }}" alt="{{ section.heading }}">
+          {% if section.caption %}<figcaption>{{ section.caption }}</figcaption>{% endif %}
+        </figure>
+      {% endif %}
+      {% for para in section.body %}
+        <p>{{ para }}</p>
+      {% endfor %}
+      {% if section.list %}
+      <ul>
+        {% for item in section.list %}
+          <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    {% endfor %}
+  </article>
+
+  <style>
+    .detail-hero {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .article-figure {
+      margin: 12px 0 18px;
+      text-align: center;
+    }
+    .article-figure img {
+      max-width: 100%;
+      border-radius: 12px;
+      box-shadow: 0 14px 28px rgba(0,0,0,0.12);
+    }
+    .article-figure figcaption {
+      color: #52607a;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+    .article-wrap {
+      max-width: 900px;
+      margin: 0 auto 80px;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+      padding: 28px;
+      color: #101828;
+    }
+    .article-cover img {
+      width: 100%;
+      height: auto;
+      border-radius: 14px;
+      margin-bottom: 18px;
+      object-fit: cover;
+    }
+    .article-wrap h2 {
+      margin-top: 24px;
+      margin-bottom: 12px;
+      font-size: 22px;
+      color: #0f172a;
+    }
+    .article-wrap p {
+      line-height: 1.7;
+      color: #334155;
+      margin: 0 0 14px;
+    }
+    .article-wrap ul {
+      padding-left: 20px;
+      margin: 0 0 16px;
+      color: #334155;
+    }
+    .article-wrap li { margin-bottom: 8px; }
+    @media (max-width: 640px) {
+      .article-wrap { padding: 20px; }
+    }
+  </style>
+{% endblock %}

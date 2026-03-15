@@ -1,0 +1,53 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+<div class="card table-card">
+  <div class="table-head users">
+    <div>User</div>
+    <div>Họ và Tên</div>
+    <div>Số file</div>
+    <div>Dung lượng</div>
+    <div>Ngày tham gia</div>
+    <div>Trạng thái</div>
+    <div>Thao tác</div>
+  </div>
+  {% for u in users %}
+  <div class="table-row users">
+    <div class="user-cell">
+      <div class="avatar medium">{{ u.username[0]|upper }}</div>
+      <div>
+        <p class="name">{{ u.username }}</p>
+        <p class="muted">{{ u.email or (u.username ~ '@email.com') }}</p>
+      </div>
+    </div>
+    <div>{{ u.full_name or 'Chưa cập nhật' }}</div>
+    <div>{{ u.file_count or 0 }}</div>
+    <div>{{ format_size(u.total_size or 0) }}</div>
+    <div>{{ u.created_at }}</div>
+    <div>
+      {% if u.is_blocked %}
+        <span class="pill warn">Locked</span>
+      {% else %}
+        <span class="pill success">Active</span>
+      {% endif %}
+    </div>
+    <div class="actions">
+      <a class="icon-btn ghost" title="Chỉnh sửa" href="{{ url_for('edit_user', user_id=u.id) }}">✏️</a>
+      {% if u.is_blocked %}
+      <form method="POST" action="{{ url_for('unblock_user', user_id=u.id) }}">
+        <button class="icon-btn green" type="submit" title="Mở khóa">🔓</button>
+      </form>
+      {% else %}
+      <form method="POST" action="{{ url_for('block_user', user_id=u.id) }}">
+        <button class="icon-btn orange" type="submit" title="Khóa">🔒</button>
+      </form>
+      {% endif %}
+      <form method="POST" action="{{ url_for('delete_user', user_id=u.id) }}">
+        <button class="icon-btn danger" type="submit" title="Xóa">🗑️</button>
+      </form>
+    </div>
+  </div>
+  {% else %}
+    <div class="empty">Chưa có user.</div>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "layout.html" %}
+
+{% block title %}Blog | FileShare{% endblock %}
+
+{% block content %}
+  <section class="blog-hero">
+    <p class="eyebrow">Blog & Knowledge</p>
+    <h1>Blog & Knowledge</h1>
+    <p class="lead">Chia sẻ kiến thức về chia sẻ file, cloud storage và VPS.</p>
+  </section>
+
+  <section class="blog-grid">
+    {% for post in posts %}
+      <article class="blog-card">
+        <div class="thumb">
+          <img src="{{ post.image }}" alt="{{ post.title }}">
+        </div>
+        <div class="blog-card-body">
+          <div class="meta">{{ post.date }}</div>
+          <h3>{{ post.title }}</h3>
+          <p>{{ post.desc }}</p>
+          <a class="blog-btn" href="{{ url_for('blog_detail', slug=post.slug) }}">Đọc thêm</a>
+        </div>
+      </article>
+    {% else %}
+      <p>Chưa có bài viết.</p>
+    {% endfor %}
+  </section>
+{% endblock %}

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}FileShare{% endblock %}</title>
+  <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/logodau.png') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="blog-page">
+  <header class="navbar">
+    <div class="brand">
+      <a class="logo-img" href="{{ url_for('home') }}">
+        <img src="{{ logo_url }}" alt="logo">
+      </a>
+    </div>
+    <nav class="nav-links">
+      <a href="{{ url_for('home') }}#features">Tính năng</a>
+      <a href="{{ url_for('home') }}#pricing">Bảng giá</a>
+      <a href="{{ url_for('home') }}#about">Về chúng tôi</a>
+      <a href="{{ url_for('contact') }}">Liên hệ</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="login" href="{{ url_for('login') }}">Đăng nhập</a>
+      <a class="primary" href="{{ url_for('register') }}">Đăng ký</a>
+    </div>
+  </header>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer id="about">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <img class="footer-logo" src="{{ logo_url }}" alt="logo">
+        <div>
+          <h4>FileShare</h4>
+          <p>Dịch vụ upload và chia sẻ file nhanh chóng, an toàn.</p>
+        </div>
+      </div>
+
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h5>Sản phẩm</h5>
+          <a href="{{ url_for('home') }}#features">Tính năng</a>
+          <a href="{{ url_for('home') }}#pricing">Bảng giá</a>
+          <a href="{{ url_for('terms') }}">Điều khoản sử dụng</a>
+        </div>
+        <div class="footer-col">
+          <h5>Giới thiệu</h5>
+          <a href="{{ url_for('blog') }}">Blog</a>
+          <a href="{{ url_for('contact') }}">Liên hệ</a>
+          <a href="#">Thuê VPS</a>
+        </div>
+        <div class="footer-col">
+          <h5>Kết nối</h5>
+          <div class="social">
+            <a class="social-btn fb" href="#" aria-label="Facebook">fb</a>
+            <a class="social-btn tg" href="#" aria-label="Telegram">tg</a>
+            <a class="social-btn yt" href="#" aria-label="YouTube">yt</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="copyright">© 2026 FileShare. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

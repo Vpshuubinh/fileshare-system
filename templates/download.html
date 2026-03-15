@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tải file | FileShare</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    body { background: #f6fbff; }
+    .download-card {
+      max-width: 520px;
+      margin: 60px auto;
+      background: #fff;
+      border-radius: 18px;
+      padding: 28px 24px 34px;
+      box-shadow: 0 24px 60px rgba(31,139,255,0.12);
+      border: 1px solid #e2e8f0;
+      text-align: center;
+    }
+    .meta { color: #475569; font-size: 14px; margin: 4px 0; }
+    .btn-primary { width: auto; display: inline-block; padding-left: 22px; padding-right: 22px; margin-top: 10px; }
+    .warn { color: #b45309; background: #fef3c7; padding: 6px 10px; border-radius: 10px; display: inline-block; margin-bottom: 10px; }
+    .preview-box {
+      margin-top: 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #f8fafc;
+    }
+    .preview-frame { width: 100%; height: 420px; border: 0; }
+  </style>
+</head>
+<body class="auth-body">
+  <div class="download-wrap">
+    <div class="ad-floating ad-left">
+      <a href="https://FileShare" target="_blank" rel="noopener" class="ad-banner ad-card" data-size="left-1">
+        <img src="/static/img/ad1.jpg" alt="Quảng cáo VPSHUUBINHTM" loading="lazy">
+        <div class="ad-copy">
+          <h4>Thuê VPS siêu ổn định</h4>
+          <p>Giá chỉ từ 75k/tháng – uptime cao, hỗ trợ 24/7.</p>
+          <span class="ad-cta">Xem ưu đãi</span>
+        </div>
+      </a>
+      <a href="https://FileShare" target="_blank" rel="noopener" class="ad-banner ad-card" data-size="left-2">
+        <img src="/static/img/ad2.jpg" alt="Quảng cáo VPSHUUBINHTM" loading="lazy">
+        <div class="ad-copy">
+          <h4>VPS GPU / Treo Game</h4>
+          <p>Hiệu năng cao, treo app/game mượt mà.</p>
+          <span class="ad-cta">Dùng thử ngay</span>
+        </div>
+      </a>
+    </div>
+    <div class="ad-floating ad-right">
+      <a href="https://FileShare" target="_blank" rel="noopener" class="ad-banner ad-card" data-size="right-1">
+        <img src="/static/img/ad3.jpg" alt="Quảng cáo VPSHUUBINHTM" loading="lazy">
+        <div class="ad-copy">
+          <h4>Backup & Storage</h4>
+          <p>Lưu trữ an toàn, băng thông quốc tế mạnh.</p>
+          <span class="ad-cta">Khám phá</span>
+        </div>
+      </a>
+      <a href="https://FileShare" target="_blank" rel="noopener" class="ad-banner ad-card" data-size="right-2">
+        <img src="/static/img/ad1.jpg" alt="Quảng cáo VPSHUUBINHTM" loading="lazy">
+        <div class="ad-copy">
+          <h4>Server Việt Nam</h4>
+          <p>Độ trễ thấp, phù hợp website, ứng dụng doanh nghiệp.</p>
+          <span class="ad-cta">Đặt máy ngay</span>
+        </div>
+      </a>
+    </div>
+
+    <div class="download-main">
+      <div class="download-card">
+        <div class="logo-pill"></div>
+        <h2>{{ file['filename'] }}</h2>
+        <p class="meta">Kích thước: {{ format_size(file['filesize']) }}</p>
+        <p class="meta">Hết hạn: {{ file['expire_time'] }}</p>
+        {% if file['password'] %}
+          <p class="meta">Trạng thái: cần mật khẩu để tải</p>
+        {% else %}
+          <p class="meta">Trạng thái: tải trực tiếp</p>
+        {% endif %}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash">
+              {% for category, message in messages %}
+                <p class="{{ category }}">{{ message }}</p>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        {% if file['password'] %}
+          <div class="warn">Link được bảo vệ bởi mật khẩu</div>
+          {% if not ready %}
+            <form method="POST" class="auth-form">
+              <label class="input-row">
+                <span class="icon">🔒</span>
+                <input type="password" name="password" placeholder="Nhập mật khẩu" required>
+              </label>
+              <button type="submit" class="btn-primary">Xác nhận</button>
+            </form>
+          {% endif %}
+        {% endif %}
+
+        {% if ready %}
+          <a class="btn-primary" href="{{ link }}">Tải xuống</a>
+        {% endif %}
+
+        {% if previewable and ready %}
+          <div style="margin-top:16px; text-align:left;">
+            <p class="meta">Xem trước:</p>
+            <div class="preview-box">
+              {% if file['filename'].lower().endswith(('.png','.jpg','.jpeg','.gif')) %}
+                <img src="{{ preview_url }}" alt="preview" style="width:100%; display:block;">
+              {% elif file['filename'].lower().endswith('.pdf') %}
+                <iframe class="preview-frame" src="{{ preview_url }}"></iframe>
+              {% elif file['filename'].lower().endswith(('.html','.htm')) %}
+                <iframe class="preview-frame" src="{{ preview_url }}"></iframe>
+              {% else %}
+                <iframe class="preview-frame" src="{{ preview_url }}"></iframe>
+              {% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="ad-floating ad-right">
+      <a href="https://FileShare" target="_blank" rel="noopener" class="ad-banner ad-card" data-size="right-1">
+        <img src="/static/img/ad3.jpg" alt="Quảng cáo VPSHUUBINHTM" loading="lazy">
+        <div class="ad-copy">
+          <h4>Backup & Storage</h4>
+          <p>Lưu trữ an toàn, băng thông quốc tế mạnh.</p>
+          <span class="ad-cta">Khám phá</span>
+        </div>
+      </a>
+      <a href="https://FileShare" target="_blank" rel="noopener" class="ad-banner ad-card" data-size="right-2">
+        <img src="/static/img/ad1.jpg" alt="Quảng cáo VPSHUUBINHTM" loading="lazy">
+        <div class="ad-copy">
+          <h4>Server Việt Nam</h4>
+          <p>Độ trễ thấp, phù hợp website, ứng dụng doanh nghiệp.</p>
+          <span class="ad-cta">Đặt máy ngay</span>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Fixed big banner bên trái -->
+  <a href="https://FileShare" target="_blank" rel="noopener" class="ad-banner-fixed ad-banner-fixed-left">
+    <img src="{{ url_for('static', filename='img/ad-big.png') }}" alt="Quảng cáo VPSHUUBINHTM" loading="lazy">
+  </a>
+  <a href="https://FileShare" target="_blank" rel="noopener" class="ad-banner-fixed ad-banner-fixed-right">
+    <img src="{{ url_for('static', filename='img/ad-big-right.jpg') }}" alt="Quảng cáo VPSHUUBINHTM" loading="lazy">
+  </a>
+
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon blue">📁</div>
+    <div>
+      <p class="label">Total Files</p>
+      <h2>{{ stats.total_files or 0 }}</h2>
+    </div>
+    <span class="pill success">+12%</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon green">👥</div>
+    <div>
+      <p class="label">Total Users</p>
+      <h2>{{ stats.total_users or 0 }}</h2>
+    </div>
+    <span class="pill success">+5%</span>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon purple">🗂️</div>
+    <div>
+      <p class="label">Total Storage</p>
+      <h2>{{ format_size(stats.total_size or 0) }}</h2>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon orange">🔗</div>
+    <div>
+      <p class="label">Active Links</p>
+      <h2>{{ active_links or 0 }}</h2>
+    </div>
+    <span class="pill success">Active</span>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-head">
+      <h3>File mới upload</h3>
+    </div>
+    <div class="list">
+      {% for f in recent_files %}
+      <div class="list-row">
+        <div class="file-chip {% if f.password %}locked{% endif %}">{{ f.filename }}</div>
+        <div class="muted">{{ format_size(f.filesize) }} · {{ f.upload_time }}</div>
+        <div class="pill {% if f.password %}warn{% else %}success{% endif %}">{% if f.password %}Locked{% else %}Public{% endif %}</div>
+      </div>
+      {% else %}
+        <p class="muted">Chưa có file.</p>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <h3>User mới đăng ký</h3>
+    </div>
+    <div class="list">
+      {% for u in recent_users %}
+      <div class="list-row">
+        <div class="avatar small">{{ u.username[0]|upper }}</div>
+        <div>
+          <p class="name">{{ u.username }}</p>
+          <p class="muted">{{ u.username }}@email.com</p>
+        </div>
+        <span class="pill {% if u.is_blocked %}warn{% else %}success{% endif %}">{% if u.is_blocked %}Locked{% else %}Active{% endif %}</span>
+      </div>
+      {% else %}
+        <p class="muted">Chưa có user.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div class="card">
+    <div class="card-head">
+      <h3>Chỉnh logo website</h3>
+    </div>
+    <form class="logo-form" action="{{ url_for('update_logo') }}" method="POST" enctype="multipart/form-data">
+      <div class="logo-preview">
+        <img src="{{ logo_url }}" alt="logo hiện tại">
+      </div>
+      <input type="file" name="logo" accept="image/*" required>
+      <button class="btn primary" type="submit">Cập nhật</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

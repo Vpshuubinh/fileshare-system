@@ -1,0 +1,92 @@
+{% extends "admin/layout.html" %}
+{% block content %}
+<div class="card form-card">
+  <h2>Chỉnh sửa User</h2>
+  <form method="POST" class="grid-2 gap">
+    <label>
+      <span>Tên Tài Khoản</span>
+      <input type="text" name="username" value="{{ user.username }}" required>
+    </label>
+    <label>
+      <span>Họ và Tên</span>
+      <input type="text" name="full_name" value="{{ user.full_name or '' }}" required>
+    </label>
+    <label class="password-row">
+      <div class="row-between">
+        <span>Mật khẩu hiện tại (nhập giá trị mới nếu muốn đổi)</span>
+        <button type="button" class="link-btn" data-edit-password>Chỉnh sửa</button>
+      </div>
+      <div class="password-wrap">
+        <input type="password" name="password" placeholder="Để trống nếu giữ nguyên" data-password-field>
+        <button type="button" class="icon-btn ghost" title="Hiện/ẩn" data-toggle-password>👁️</button>
+      </div>
+    </label>
+    <label>
+      <span>Admin Role</span>
+      <select name="role">
+        <option value="user" {% if user.role == 'user' %}selected{% endif %}>User</option>
+        <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+      </select>
+    </label>
+    <label>
+      <span>ID User</span>
+      <input type="text" value="{{ user.id }}" readonly>
+    </label>
+    <label>
+      <span>Email</span>
+      <input type="email" name="email" value="{{ user.email or '' }}" required>
+    </label>
+    <label>
+      <span>Đăng nhập gần nhất vào lúc</span>
+      <input type="text" value="{{ last_login_at or 'Chưa ghi nhận' }}" readonly>
+    </label>
+    <label>
+      <span>Đăng ký tài khoản vào lúc</span>
+      <input type="text" value="{{ user.created_at }}" readonly>
+    </label>
+    <label>
+      <span>Địa chỉ IP dùng để đăng nhập</span>
+      <input type="text" value="{{ last_login_ip or 'Chưa ghi nhận' }}" readonly>
+    </label>
+    <div class="actions-row">
+      <a class="btn ghost" href="{{ url_for('admin_users') }}">Quay lại</a>
+      <button class="btn primary" type="submit">Lưu lại</button>
+    </div>
+  </form>
+</div>
+<style>
+  .form-card { max-width: 1380px; margin: 0 auto; width: 100%; }
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+  .grid-2 label { display: flex; flex-direction: column; gap: 6px; font-weight: 600; color: #1f2937; }
+  .grid-2 input, .grid-2 select { padding: 10px 12px; border: 1px solid #e5e7eb; border-radius: 10px; font-size: 14px; }
+  .grid-2 input[readonly] { background: #f8fafc; color: #6b7280; }
+  .actions-row { grid-column: 1 / -1; display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px; }
+  .password-row .row-between { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .password-wrap { display: flex; gap: 8px; align-items: center; }
+  .password-wrap .icon-btn { padding: 10px 12px; border-radius: 10px; border: 1px solid #e5e7eb; background: #f8fafc; cursor: pointer; }
+  .password-wrap .icon-btn:hover { background: #e2e8f0; }
+  .link-btn { background: none; border: none; color: #2563eb; cursor: pointer; font-weight: 700; }
+  .link-btn:hover { text-decoration: underline; }
+  .password-row input { flex: 1; }
+  .btn { padding: 10px 14px; border-radius: 10px; border: none; cursor: pointer; font-weight: 600; }
+  .btn.primary { background: linear-gradient(90deg, #2563eb, #06b6d4); color: #fff; }
+  .btn.ghost { background: #eef2ff; color: #334155; }
+</style>
+<script>
+  const passwordField = document.querySelector('[data-password-field]');
+  const editBtn = document.querySelector('[data-edit-password]');
+  const toggleBtn = document.querySelector('[data-toggle-password]');
+  if (editBtn && passwordField) {
+    editBtn.addEventListener('click', () => {
+      passwordField.focus();
+    });
+  }
+  if (toggleBtn && passwordField) {
+    toggleBtn.addEventListener('click', () => {
+      const isHidden = passwordField.type === 'password';
+      passwordField.type = isHidden ? 'text' : 'password';
+      toggleBtn.textContent = isHidden ? '🙈' : '👁️';
+    });
+  }
+</script>
+{% endblock %}

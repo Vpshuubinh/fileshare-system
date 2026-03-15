@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FileShare | Đăng ký</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+</head>
+<body class="auth-body">
+  <div class="auth-card" id="authCard">
+    <div class="logo-pill">
+      <a href="{{ url_for('home') }}">
+        <img src="{{ logo_url }}" alt="logo">
+      </a>
+    </div>
+    <h2>Tạo tài khoản mới</h2>
+    <p class="subtitle">Bắt đầu sử dụng dịch vụ upload file</p>
+
+    <div class="tab-switch">
+      <a class="tab" href="{{ url_for('login') }}">Đăng nhập</a>
+      <a class="tab active" href="{{ url_for('register') }}">Đăng ký</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash toast-mount" data-flash='{{ messages|tojson }}'></div>
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" class="auth-form">
+      <label class="input-row">
+        <span class="icon">H</span>
+        <input type="text" name="full_name" placeholder="Họ và Tên" required>
+      </label>
+      <label class="input-row">
+        <span class="icon">U</span>
+        <input type="text" name="username" placeholder="Tên đăng nhập" required>
+      </label>
+      <label class="input-row">
+        <span class="icon">@</span>
+        <input type="email" name="email" placeholder="Email" required>
+      </label>
+      <label class="input-row with-action">
+        <span class="icon">*</span>
+        <input type="password" name="password" placeholder="Mật khẩu" required data-password>
+        <button type="button" class="eye-btn" data-toggle>Hiện</button>
+        <button type="button" class="ghost-btn" data-random>Random</button>
+      </label>
+      <label class="input-row with-action">
+        <span class="icon">*</span>
+        <input type="password" name="password_confirm" placeholder="Xác nhận mật khẩu" required data-confirm>
+        <button type="button" class="eye-btn" data-toggle-confirm>Hiện</button>
+      </label>
+      <label class="checkbox-row">
+        <input type="checkbox" required>
+        <span>Tôi đồng ý với <a href="{{ url_for('terms') }}">Điều khoản sử dụng</a> và Chính sách bảo mật</span>
+      </label>
+      <button type="submit" class="btn-primary" data-label="Đăng ký">Đăng ký</button>
+    </form>
+
+    <div class="divider"><span>Hoặc tiếp tục với</span></div>
+    <div class="social-row">
+      <button type="button" class="social-btn">G Google</button>
+      <button type="button" class="social-btn">f Facebook</button>
+    </div>
+
+    <div class="back-home">
+      <a href="{{ url_for('home') }}">← Quay lại trang chủ</a>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+</body>
+</html>

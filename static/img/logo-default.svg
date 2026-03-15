@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1d3ccf"/>
+      <stop offset="100%" stop-color="#4f46e5"/>
+    </linearGradient>
+  </defs>
+  <rect rx="22" ry="22" width="120" height="120" fill="url(#g)"/>
+  <path d="M38 78V42c0-5.5 4.5-10 10-10h24c5.5 0 10 4.5 10 10v36c0 5.5-4.5 10-10 10H48c-5.5 0-10-4.5-10-10z" fill="#fff" opacity="0.16"/>
+  <path d="M48 84c-3.3 0-6-2.7-6-6V42c0-3.3 2.7-6 6-6h24c3.3 0 6 2.7 6 6v36c0 3.3-2.7 6-6 6H48z" fill="#fff" opacity="0.22"/>
+  <circle cx="60" cy="54" r="16" fill="#fff"/>
+  <text x="60" y="64" text-anchor="middle" font-family="Manrope,Segoe UI,Arial" font-size="18" font-weight="800" fill="#1d3ccf">FS</text>
+</svg>

@@ -1,0 +1,257 @@
+{% extends "layout.html" %}
+{% block title %}Liên hệ hỗ trợ | FileShare{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+:root{
+  --blue:#1f8bff;
+  --teal:#14d6d6;
+  --card:#ffffff;
+  --border:#e2e8f0;
+  --text:#0f172a;
+  --muted:#475569;
+}
+
+body.contact-page{
+  background:
+    radial-gradient(circle at 20% 20%, rgba(31,139,255,0.08), transparent 30%),
+    radial-gradient(circle at 80% 10%, rgba(20,214,214,0.1), transparent 28%),
+    #f6fbff;
+  color:var(--text);
+  font-family:"Inter",system-ui,-apple-system,sans-serif;
+}
+
+/* HERO */
+
+.contact-hero{
+  padding:80px 20px 40px;
+  text-align:center;
+}
+
+.contact-hero h1{
+  margin:0;
+  font-size:38px;
+  letter-spacing:-0.5px;
+}
+
+.contact-hero p{
+  margin:14px auto 0;
+  max-width:720px;
+  color:var(--muted);
+  line-height:1.9;
+}
+
+/* MAIN CONTAINER */
+
+.contact-shell{
+  max-width:1100px;
+  margin:0 auto 100px;
+  padding:0 20px;
+}
+
+/* GRID */
+
+.contact-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:22px;
+}
+
+/* CARD */
+
+.contact-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:30px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+
+  transition:all .3s ease;
+
+  box-shadow:0 12px 34px rgba(31,139,255,0.12);
+}
+
+.contact-card:hover{
+  transform:translateY(-8px);
+  box-shadow:0 20px 50px rgba(31,139,255,0.2);
+  border-color:rgba(31,139,255,0.4);
+}
+
+/* ICON */
+
+.contact-card .icon{
+  width:46px;
+  height:46px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+
+  background:rgba(31,139,255,0.08);
+  color:var(--blue);
+
+  font-size:20px;
+}
+
+/* TEXT */
+
+.contact-card h3{
+  margin:6px 0 0;
+  font-size:20px;
+}
+
+.contact-card p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.7;
+  flex:1;
+}
+
+/* BUTTON */
+
+.contact-card a.btn{
+  align-self:flex-start;
+
+  border-radius:8px;
+  padding:10px 20px;
+
+  background:linear-gradient(45deg,#00f5a0,#00d9f5);
+
+  color:#051225;
+  font-weight:600;
+  text-decoration:none;
+
+  box-shadow:0 10px 30px rgba(0,217,245,0.22);
+
+  transition:all .25s ease;
+}
+
+.contact-card a.btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 14px 36px rgba(0,217,245,0.35);
+}
+
+/* RESPONSIVE */
+
+@media(max-width:1024px){
+  .contact-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:720px){
+
+  .contact-grid{
+    grid-template-columns:1fr;
+  }
+
+  .contact-hero h1{
+    font-size:30px;
+  }
+
+  .contact-card{
+    padding:24px;
+  }
+
+}
+</style>
+{% endblock %}
+
+
+
+{% block content %}
+
+<section class="contact-hero">
+
+<h1>Liên hệ hỗ trợ</h1>
+
+<p>
+Nếu bạn cần hỗ trợ về việc tải lên tệp, chia sẻ file dung lượng lớn,
+hoặc gặp sự cố khi sử dụng hệ thống FileShare,
+hãy liên hệ với chúng tôi qua các nền tảng dưới đây.
+</p>
+
+</section>
+
+
+<section class="contact-shell">
+
+<div class="contact-grid">
+
+<div class="contact-card">
+<div class="icon">
+<i class="fa-brands fa-facebook-f"></i>
+</div>
+
+<h3>Facebook</h3>
+
+<p>
+Liên hệ nhanh qua Facebook để được hỗ trợ về việc
+upload file, chia sẻ tệp hoặc các vấn đề liên quan đến tài khoản.
+</p>
+
+<a class="btn"
+href="https://www.facebook.com/huubinhtm"
+target="_blank"
+rel="noopener">
+Liên hệ Facebook
+</a>
+
+</div>
+
+
+
+<div class="contact-card">
+
+<div class="icon">
+<i class="fa-solid fa-comment-dots"></i>
+</div>
+
+<h3>Zalo</h3>
+
+<p>
+Nhắn tin trực tiếp qua Zalo để được hỗ trợ nhanh chóng
+về việc chia sẻ file và sử dụng hệ thống lưu trữ.
+</p>
+
+<a class="btn"
+href="https://zalo.me/0977367398"
+target="_blank"
+rel="noopener">
+Chat Zalo
+</a>
+
+</div>
+
+
+
+<div class="contact-card">
+
+<div class="icon">
+<i class="fa-brands fa-telegram"></i>
+</div>
+
+<h3>Telegram</h3>
+
+<p>
+Trao đổi trực tiếp qua Telegram để được hỗ trợ kỹ thuật
+khi gặp sự cố tải lên hoặc tải xuống tệp.
+</p>
+
+<a class="btn"
+href="https://t.me/huubinh215"
+target="_blank"
+rel="noopener">
+Chat Telegram
+</a>
+
+</div>
+
+</div>
+
+</section>
+
+{% endblock %}
